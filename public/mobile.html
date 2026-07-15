@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <!-- ▼ 最重要: スマホ最適化とPWA(アプリ化)のためのメタタグ ▼ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>ShiftApp</title>
+    
+    <link rel="stylesheet" href="mobile.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+</head>
+<body>
+    <!-- メインコンテンツ -->
+    <div class="main-content">
+        
+        <!-- ページ1: シフト管理 -->
+        <div id="page-shift" class="page active">
+            <h1 class="ios-large-title">シフト</h1>
+            
+            <div class="header-controls">
+                <select id="select-year"></select> 年
+                <select id="select-month"></select> 月度
+                <span id="date-range-label" class="date-range-badge"></span>
+            </div>
+            
+            <!-- カレンダー上部（曜日） -->
+            <div class="calendar-header">
+                <div class="weekday-header">日</div><div class="weekday-header">月</div>
+                <div class="weekday-header">火</div><div class="weekday-header">水</div>
+                <div class="weekday-header">木</div><div class="weekday-header">金</div>
+                <div class="weekday-header">土</div>
+            </div>
+            
+            <!-- カレンダーマス（アイコンと数字のみ表示） -->
+            <div class="calendar-grid" id="calendar">
+                <!-- ここは後でTypeScriptから自動生成されますが、デザイン確認用に1マスだけダミーを置きます -->
+                <div class="day-cell active-day">
+                    <div class="date-label">16</div>
+                    <div class="koma-row"><span class="material-symbols-outlined icon-jrhigh">backpack</span> 2</div>
+                    <div class="koma-row"><span class="material-symbols-outlined icon-hs">school</span> 1</div>
+                </div>
+            </div>
+
+            <!-- ▼ 画面下部の詳細・操作パネル ▼ -->
+            <!-- ▼ 画面下部の詳細・操作パネル ▼ -->
+            <div id="detail-panel" class="detail-panel">
+                <h2 id="detail-date-title" class="detail-title">日付を選択してください</h2>
+                
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <span class="material-symbols-outlined icon-jrhigh">backpack</span> 小中学生
+                    </span>
+                    <div class="counter-group">
+                        <!-- ▼ 変更: onclickとidを追加 ▼ -->
+                        <button class="btn-circle" onclick="updateKoma('jrHigh', -1)">-</button>
+                        <span id="detail-jrhigh-count" class="count-display">0</span>
+                        <button class="btn-circle" onclick="updateKoma('jrHigh', 1)">+</button>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">
+                        <span class="material-symbols-outlined icon-hs">school</span> 高校生
+                    </span>
+                    <div class="counter-group">
+                        <!-- ▼ 変更: onclickとidを追加 ▼ -->
+                        <button class="btn-circle" onclick="updateKoma('highSchool', -1)">-</button>
+                        <span id="detail-hs-count" class="count-display">0</span>
+                        <button class="btn-circle" onclick="updateKoma('highSchool', 1)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ページ2: レギュラー授業 -->
+        <div id="page-regular" class="page">
+            <h1 class="ios-large-title">レギュラー</h1>
+            <div id="regular-container"></div>
+        </div>
+
+        <!-- ページ3: 時給設定 -->
+        <div id="page-wage" class="page">
+            <h1 class="ios-large-title">設定</h1>
+            <div class="wage-container">
+                <!-- ここに設定項目を配置します -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ▼ HIG準拠: 画面下部固定のタブバー ▼ -->
+    <nav class="tab-bar">
+        <button class="tab-btn active" onclick="switchPage('shift', this)">
+            <span class="material-symbols-outlined">calendar_month</span>
+            <span class="tab-label">シフト</span>
+        </button>
+        <button class="tab-btn" onclick="switchPage('regular', this)">
+            <span class="material-symbols-outlined">event_repeat</span>
+            <span class="tab-label">レギュラー</span>
+        </button>
+        <button class="tab-btn" onclick="switchPage('wage', this)">
+            <span class="material-symbols-outlined">settings</span>
+            <span class="tab-label">設定</span>
+        </button>
+    </nav>
+
+    <!-- ※TypeScriptファイルは後でスマホ用に作り直すため、一旦コメントアウトかダミーにしておきます -->
+    <script type="module" src="mobile.js"></script>
+</body>
+</html>
