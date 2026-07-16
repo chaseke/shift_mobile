@@ -438,12 +438,20 @@ body {
 }
 
 @media (display-mode: standalone) {
-    .tab-bar {
-        bottom: 20px; /* 古いiPhone向けの保険 */
+    /* .tab-bar {
+        bottom: 20px; // 古いiPhone向けの保険
         bottom: max(12px, calc(env(safe-area-inset-bottom) - 12px));
     }
 
     .main-content {
         padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    } */
+    .tab-bar {
+        /* 基本は20px浮かせつつ、ホームバーがある機種はその分（約34px）を足す */
+        bottom: calc(20px + env(safe-area-inset-bottom)); 
+    }
+    
+    .main-content {
+        padding-bottom: calc(85px + env(safe-area-inset-bottom));
     }
 }
