@@ -12,99 +12,170 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
 </head>
 <body>
-    <!-- メインコンテンツ -->
+ 
     <div class="main-content">
-        
         <!-- ページ1: シフト管理 -->
         <div id="page-shift" class="page active">
-            <h1 class="ios-large-title">シフト</h1>
-            
-            <div class="header-controls">
-                <select id="select-year"></select> 年
-                <select id="select-month"></select> 月度
-                <span id="date-range-label" class="date-range-badge"></span>
+            <div class="ios-header">
+                <div class="ios-header-text">
+                    <div id="sub-month-title" class="ios-sub-title">7.16 - 8.15</div>
+                    <h1 id="main-month-title" class="ios-large-title">7月度</h1>
+                </div>
+                <button class="ios-icon-btn" onclick="openDateModal()">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                </button>
             </div>
+
             
-            <!-- カレンダー上部（曜日） -->
             <div class="calendar-header">
                 <div class="weekday-header">日</div><div class="weekday-header">月</div>
                 <div class="weekday-header">火</div><div class="weekday-header">水</div>
                 <div class="weekday-header">木</div><div class="weekday-header">金</div>
                 <div class="weekday-header">土</div>
             </div>
-            
-            <!-- カレンダーマス（アイコンと数字のみ表示） -->
-            <div class="calendar-grid" id="calendar">
-                <!-- ここは後でTypeScriptから自動生成されますが、デザイン確認用に1マスだけダミーを置きます -->
-                <div class="day-cell active-day">
-                    <div class="date-label">16</div>
-                    <div class="koma-row"><span class="material-symbols-outlined icon-jrhigh">backpack</span> 2</div>
-                    <div class="koma-row"><span class="material-symbols-outlined icon-hs">school</span> 1</div>
-                </div>
+            <div class="calendar-grid" id="calendar"></div>
+
+            <div id="total-banner" class="total-area">
+                当月の合計時間: <span id="grand-total-hours">0</span> 時間 <span id="grand-total-mins">0</span> 分
+            </div>
+            <div id="warning-msg" class="warning-popup">
+                <span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle;">warning</span> 
+                合計勤務時間が80時間を超えています
             </div>
 
-            <!-- ▼ 画面下部の詳細・操作パネル ▼ -->
-            <!-- ▼ 画面下部の詳細・操作パネル ▼ -->
             <div id="detail-panel" class="detail-panel">
-                <h2 id="detail-date-title" class="detail-title">日付を選択してください</h2>
+                <h2 id="detail-date-title" class="detail-title">日付を選択</h2>
                 
                 <div class="detail-row">
-                    <span class="detail-label">
-                        <span class="material-symbols-outlined icon-jrhigh">backpack</span> 小中学生
-                    </span>
+                    <span class="detail-label"><span class="material-symbols-outlined icon-jrhigh">backpack</span> 小中学生</span>
                     <div class="counter-group">
-                        <!-- ▼ 変更: onclickとidを追加 ▼ -->
                         <button class="btn-circle" onclick="updateKoma('jrHigh', -1)">-</button>
                         <span id="detail-jrhigh-count" class="count-display">0</span>
                         <button class="btn-circle" onclick="updateKoma('jrHigh', 1)">+</button>
                     </div>
                 </div>
-                
                 <div class="detail-row">
-                    <span class="detail-label">
-                        <span class="material-symbols-outlined icon-hs">school</span> 高校生
-                    </span>
+                    <span class="detail-label"><span class="material-symbols-outlined icon-hs">school</span> 高校生</span>
                     <div class="counter-group">
-                        <!-- ▼ 変更: onclickとidを追加 ▼ -->
                         <button class="btn-circle" onclick="updateKoma('highSchool', -1)">-</button>
                         <span id="detail-hs-count" class="count-display">0</span>
                         <button class="btn-circle" onclick="updateKoma('highSchool', 1)">+</button>
                     </div>
                 </div>
+                
+                <!-- ▼ 詳細設定を開くボタン ▼ -->
+                <button class="ios-secondary-btn" onclick="openDetailModal()">
+                    <span class="material-symbols-outlined" style="margin-right: 8px;">tune</span>
+                    チューター・時間調整
+                </button>
             </div>
         </div>
 
         <!-- ページ2: レギュラー授業 -->
         <div id="page-regular" class="page">
             <h1 class="ios-large-title">レギュラー</h1>
-            <div id="regular-container"></div>
+            <div class="ios-list-group" id="regular-container"></div>
+
+            <button class="ios-primary-btn" onclick="applyRegularShifts()">
+                <span class="material-symbols-outlined">event_repeat</span>カレンダーに反映
+            </button>
         </div>
 
         <!-- ページ3: 時給設定 -->
         <div id="page-wage" class="page">
             <h1 class="ios-large-title">設定</h1>
-            <div class="wage-container">
-                <!-- ここに設定項目を配置します -->
+            <h2 class="ios-section-title">時給・交通費</h2>
+            <div class="ios-list-group">
+                <div class="ios-list-item"><label>事務時間</label><div class="ios-input-wrap"><input type="number" id="wage-admin"> 円</div></div>
+                <div class="ios-list-item"><label>小中学生</label><div class="ios-input-wrap"><input type="number" id="wage-jrhigh"> 円</div></div>
+                <div class="ios-list-item"><label>高校生</label><div class="ios-input-wrap"><input type="number" id="wage-high"> 円</div></div>
+                <div class="ios-list-item"><label>チューター</label><div class="ios-input-wrap"><input type="number" id="wage-tutor"> 円</div></div>
+                <div class="ios-list-item"><label>1日の交通費</label><div class="ios-input-wrap"><input type="number" id="wage-transport"> 円</div></div>
             </div>
+
+            <button class="ios-primary-btn" onclick="calculateAndShowIncome()" style="background-color: #34c759;">
+                <span class="material-symbols-outlined">receipt_long</span>当月の明細を見る
+            </button>
         </div>
 
+        <!-- ▼ ページ4: 給与明細画面（新規追加） ▼ -->
+        <div id="page-income" class="page">
+            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                <button class="ios-back-btn" style="margin-right: 16px;" onclick="switchPage('wage', null)">
+                    <span class="material-symbols-outlined" style="margin:0; font-size: 32px;">chevron_left</span>
+                </button>
+                <h1 class="ios-large-title" style="margin: 0;">給与明細</h1>
+            </div>
+            <div class="ios-list-group" id="income-details-container">
+                <!-- ここに計算結果がJavaScriptで挿入されます -->
+            </div>
+            <div class="detail-panel" style="text-align: center; margin-top: 24px;">
+                <h2 style="margin: 0; color: #8e8e93; font-size: 14px;">予想合計収入</h2>
+                <div id="income-total" style="font-size: 32px; font-weight: 700; color: #000; margin-top: 8px;">0 円</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ▼ ポップアップ用モーダル（新規追加） ▼ -->
+    <div id="detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="margin-top: 0; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 12px;">詳細設定</h3>
+            <div class="detail-row">
+                <span class="detail-label"><span class="material-symbols-outlined icon-tutor">local_library</span> チューター</span>
+                <div class="counter-group">
+                    <button class="btn-circle" onclick="updateModalTutor(-1)">-</button>
+                    <span id="modal-tutor-count" class="count-display">0</span>
+                    <button class="btn-circle" onclick="updateModalTutor(1)">+</button>
+                </div>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label"><span class="material-symbols-outlined" style="color:#8e8e93;">schedule</span> 時間調整</span>
+                <div class="counter-group">
+                    <button class="btn-circle" onclick="updateModalAdjust(-5)">-5</button>
+                    <span id="modal-adjust-count" class="count-display" style="width: 50px;">0分</span>
+                    <button class="btn-circle" onclick="updateModalAdjust(5)">+5</button>
+                </div>
+            </div>
+            <button class="ios-primary-btn" onclick="closeDetailModal()" style="margin-top: 24px;">完了</button>
+        </div>
     </div>
 
     <!-- ▼ HIG準拠: 画面下部固定のタブバー ▼ -->
     <nav class="tab-bar">
-        <button class="tab-btn active" onclick="switchPage('shift', this)">
+        <div id="tab-indicator-wrap" class="tab-indicator-wrapper">
+            <div class="tab-indicator"></div>
+        </div>
+        
+        <button class="tab-btn active" onclick="switchPage('shift', 0)">
             <span class="material-symbols-outlined">calendar_month</span>
-            <span class="tab-label">シフト</span>
+            <span class="tab-label">カレンダー</span> <!-- 名前を変更 -->
         </button>
-        <button class="tab-btn" onclick="switchPage('regular', this)">
+        <button class="tab-btn" onclick="switchPage('regular', 1)">
             <span class="material-symbols-outlined">event_repeat</span>
             <span class="tab-label">レギュラー</span>
         </button>
-        <button class="tab-btn" onclick="switchPage('wage', this)">
+        <button class="tab-btn" onclick="switchPage('wage', 2)">
             <span class="material-symbols-outlined">settings</span>
             <span class="tab-label">設定</span>
         </button>
     </nav>
+
+    <div id="date-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="margin-top: 0; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 12px;">表示月の変更</h3>
+            
+            <div class="detail-row" style="justify-content: center; gap: 16px;">
+                <div class="ios-input-wrap" style="background:#e5e5ea; padding:8px; border-radius:8px;">
+                    <select id="select-year" style="border:none; background:transparent; font-size:18px; font-weight:bold;"></select> 年
+                </div>
+                <div class="ios-input-wrap" style="background:#e5e5ea; padding:8px; border-radius:8px;">
+                    <select id="select-month" style="border:none; background:transparent; font-size:18px; font-weight:bold;"></select> 月度
+                </div>
+            </div>
+            
+            <button class="ios-primary-btn" onclick="closeDateModal()" style="margin-top: 24px;">この月を表示</button>
+        </div>
+    </div>
 
     <!-- ※TypeScriptファイルは後でスマホ用に作り直すため、一旦コメントアウトかダミーにしておきます -->
     <script type="module" src="mobile.js"></script>

@@ -6,6 +6,11 @@ body {
     background-color: #f2f2f7; /* iOS標準のシステム背景色（ライトグレー） */
     color: #000000;
     -webkit-tap-highlight-color: transparent; /* タップ時の青い半透明を消す */
+
+    height: 100dvh; /* スマホのURLバーの伸び縮みを考慮した最新の高さ単位(dvh) */
+    overflow: hidden; /* ページ全体のスクロールを禁止！ */
+    display: flex;
+    flex-direction: column;
 }
 
 /* メインコンテンツ領域（タブバーの裏に隠れないように下部に余白を設ける） */
@@ -14,6 +19,10 @@ body {
     /* env(safe-area-inset-bottom) はiPhoneのホームバーに被らないようにする魔法の変数 */
     padding-bottom: calc(90px + env(safe-area-inset-bottom));
     padding-top: max(20px, env(safe-area-inset-top)); /* ノッチ（カメラ穴）回避 */
+
+    flex: 1; /* 余った画面全体を占有する */
+    overflow-y: auto; /* この箱の中だけスクロールを許可する */
+    -webkit-overflow-scrolling: touch; /* iOS特有の「スッと滑る慣性スクロール」を有効化する魔法 */
 }
 
 /* ページ切り替えの仕組み */
@@ -30,53 +39,160 @@ body {
 }
 
 /* ▼ HIG準拠: タブバー（すりガラス） ▼ */
+/* ▼ 変更: 最新iOS風 フローティング・タブバー ▼ */
 .tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    /* iPhoneのホームバーを考慮した高さとパディング */
-    padding-bottom: env(safe-area-inset-bottom);
-    height: 50px;
-    background-color: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 0.5px solid rgba(0, 0, 0, 0.15); /* 極細の境界線 */
+    padding: 0;
+    position: relative;
+    /* 画面下部から少し浮かせ、横幅も少し狭める */
+    bottom: max(20px, env(safe-area-inset-bottom));
+    left: 16px;
+    width: calc(100% - 32px);
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 32px; /* 完全な丸みを持たせる */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 0.5px solid rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 1000;
+    padding: 0 8px; /* 内側の余白 */
+    box-sizing: border-box;
 }
 
-/* タブボタンのデザイン */
 .tab-btn {
-    background: none;
+    background: transparent;
     border: none;
     color: #999999;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 4px 0;
+    width: 33.333%;
+    z-index: 1;
+    height: 48px;
+    border-radius: 24px; /* ボタン自体も丸くする */
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.tab-btn .material-symbols-outlined {
-    font-size: 26px;
-    margin-bottom: 2px;
-}
-
-.tab-btn .tab-label {
-    font-size: 10px;
-    font-weight: 500;
-}
-
-/* アクティブなタブはApple標準のブルー（Tint Color）へ */
+/* 選択中のタブは背景を薄いブルーにして丸く囲む */
 .tab-btn.active {
+    /* background-color: #e5f1ff; */
     color: #007aff;
 }
+
+/* スライドするガラスカーソルの外枠 */
+.tab-indicator-wrapper {
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    left: 0;
+    width: 33.333%;
+    padding: 0 8px; /* ボタンに合わせた余白 */
+    box-sizing: border-box;
+    z-index: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* なめらかなスライド */
+}
+/* ガラスのテクスチャ本体 */
+.tab-indicator {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.4); /* 半透明の白 */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5); /* 光沢感を出す白いフチ */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.tab-btn .material-symbols-outlined { font-size: 24px; margin-bottom: 2px; }
+.tab-btn .tab-label { font-size: 10px; font-weight: 600; }
+
+/* ▼ 追加: Apple風 浮いている「戻る」ボタン ▼ */
+.ios-back-btn {
+    width: 44px;
+    height: 44px;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #007aff;
+}
+.ios-back-btn:active {
+    transform: scale(0.92);
+}
+
+/* ▼ 追加: 合計時間と警告表示 ▼ */
+.total-area {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    margin-bottom: 16px;
+}
+
+.warning-popup {
+    background-color: #ff3b30;
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(255, 59, 48, 0.3);
+    
+    /* display: none ではなく、透明度と高さでアニメーションさせる */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    max-height: 0;
+    margin: 0;
+    padding: 0 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.warning-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    max-height: 100px;
+    margin-bottom: 16px;
+    padding: 12px;
+}
+
+/* ▼ 追加: チューター用のアイコンカラー（iOSのオレンジ） ▼ */
+.icon-tutor { color: #ff9500; }
+
+/* ▼ 追加: モーダル（詳細設定ポップアップ） ▼ */
+.modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); z-index: 2000;
+    justify-content: center; align-items: center;
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: #ffffff; width: 300px; border-radius: 20px;
+    padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: popup 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ios-secondary-btn {
+    width: 100%; background-color: #f2f2f7; color: #007aff; border: none;
+    border-radius: 12px; padding: 12px; font-size: 16px; font-weight: 600;
+    cursor: pointer; margin-top: 16px; display: flex; justify-content: center; align-items: center;
+}
+.ios-secondary-btn:active { background-color: #e5e5ea; }
 
 /* ▼ カレンダー関連（スマホ最適化） ▼ */
 .header-controls {
@@ -210,3 +326,114 @@ body {
     font-size: 20px;
     font-weight: 700;
 }
+
+/* ▼ iOS風のリストグループ（設定画面など） ▼ */
+.ios-description {
+    font-size: 14px;
+    color: #8e8e93;
+    margin: 0 0 16px 8px;
+}
+.ios-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8e8e93;
+    text-transform: uppercase;
+    margin: 24px 0 8px 16px;
+}
+.ios-list-group {
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+.ios-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid #e5e5ea;
+    font-size: 16px;
+    font-weight: 500;
+}
+.ios-list-item:last-child {
+    border-bottom: none;
+}
+.ios-input-wrap {
+    display: flex;
+    align-items: center;
+    color: #8e8e93;
+}
+.ios-input-wrap input {
+    width: 60px;
+    text-align: right;
+    font-size: 16px;
+    color: #007aff;
+    border: none;
+    outline: none;
+    margin-right: 4px;
+    background: transparent;
+}
+
+/* ▼ iOS風のプライマリボタン ▼ */
+.ios-primary-btn {
+    width: 100%;
+    background-color: #007aff;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+    transition: transform 0.1s;
+}
+.ios-primary-btn:active {
+    transform: scale(0.96);
+}
+.ios-primary-btn .material-symbols-outlined {
+    margin-right: 8px;
+}
+
+.ios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 20px 0 16px 0;
+}
+.ios-header-text {
+    display: flex;
+    flex-direction: column;
+}
+.ios-sub-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #8e8e93; /* HIG標準のグレー */
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+.ios-header .ios-large-title {
+    margin: 0;
+}
+.ios-icon-btn {
+    background: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #007aff;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.ios-icon-btn:active {
+    transform: scale(0.92);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
