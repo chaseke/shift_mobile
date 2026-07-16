@@ -439,9 +439,9 @@ body {
 
 @media (display-mode: standalone) {
     .tab-bar {
-        bottom: env(safe-area-inset-bottom); /* 余計な数字は足さない！ */
+        bottom: env(safe-area-inset-bottom - 8px); /* 余計な数字は足さない！ */
     }
     .main-content {
-        padding-bottom: calc(30px + env(safe-area-inset-bottom));
+        padding-bottom: calc(65px + env(safe-area-inset-bottom));
     }
 }
