@@ -304,6 +304,8 @@ body {
 .counter-group {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    width: 120px;
 }
 .btn-circle {
     width: 36px;
@@ -321,10 +323,11 @@ body {
 }
 .btn-circle:active { background-color: #e5e5ea; }
 .count-display {
-    width: 40px;
+    width: 48px;
     text-align: center;
     font-size: 20px;
     font-weight: 700;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ▼ iOS風のリストグループ（設定画面など） ▼ */
@@ -439,7 +442,7 @@ body {
 
 @media (display-mode: standalone) {
     .tab-bar {
-        bottom: env(safe-area-inset-bottom - 8px); /* 余計な数字は足さない！ */
+        bottom: calc(env(safe-area-inset-bottom - 8px)); /* 余計な数字は足さない！ */
     }
     .main-content {
         padding-bottom: calc(65px + env(safe-area-inset-bottom));
