@@ -451,7 +451,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between; /* 両端に散らす */
-    width: 110px; /* ★ここが重要: 固定幅を持たせることで上の行と縦のラインが完璧に揃う */
+    width: 120px; /* ★ここが重要: 固定幅を持たせることで上の行と縦のラインが完璧に揃う */
+}
+
+.ios-stepper-wrap > span {
+    display: inline-block;
+    width: 48px;         /* 横幅を固定！これで左右のボタンが動かなくなる */
+    text-align: center;  /* 数字をど真ん中に配置 */
+    font-weight: 600;    /* 少し太字にして数値を読みやすく（お好みで） */
+    font-variant-numeric: tabular-nums; /* 数字の幅を均等にするApple推奨のプロパティ */
 }
 
 /* ＋/－ボタン本体 */
