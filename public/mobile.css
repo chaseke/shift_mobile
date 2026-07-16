@@ -445,3 +445,41 @@ body {
         padding-bottom: calc(65px + env(safe-area-inset-bottom));
     }
 }
+
+/* 右側の＋/－ボタンと数字を包むエリア */
+.ios-stepper-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 両端に散らす */
+    width: 110px; /* ★ここが重要: 固定幅を持たせることで上の行と縦のラインが完璧に揃う */
+}
+
+/* ＋/－ボタン本体 */
+.ios-stepper-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #f2f2f7;
+    color: #007aff;
+    border: none;
+    
+    /* ★ここが重要: 中のアイコンを絶対的な「ど真ん中」に配置する魔法 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.1s;
+}
+
+/* ボタンを押したときのアニメーション */
+.ios-stepper-btn:active {
+    background-color: #e5e5ea;
+}
+
+/* アイコン自体のサイズと位置の微調整 */
+.ios-stepper-btn .material-symbols-outlined {
+    font-size: 20px;
+    margin: 0;
+    line-height: 1;
+}
