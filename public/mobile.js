@@ -381,6 +381,7 @@ async function downloadHistory() {
 }
 const mainContent = document.querySelector('.main-content');
 const tabBar = document.querySelector('.tab-bar');
+let lastScrollTop = 0;
 if (mainContent && tabBar) {
     // ▼ 追加: タブバー（丸いアイコン）をタップした時の処理
     tabBar.addEventListener('click', () => {
@@ -391,14 +392,20 @@ if (mainContent && tabBar) {
     });
     // ▼ 既存: スクロールした時の処理
     mainContent.addEventListener('scroll', () => {
+        const currentScroll = mainContent.scrollTop;
+        if (currentScroll > lastScrollTop) {
+            tabBar.classList.remove('force-expand');
+        }
         // カレンダーなどをスクロールしたら、展開モードを解除して再び縮める
-        tabBar.classList.remove('force-expand');
-        if (mainContent.scrollTop > 20) {
+        // tabBar.classList.remove('force-expand');
+        if (currentScroll > 20) {
             tabBar.classList.add('scrolled');
         }
         else {
             tabBar.classList.remove('scrolled');
+            tabBar.classList.remove('force-expand');
         }
+        lastScrollTop = currentScroll;
     });
 }
 // HTMLへの公開
