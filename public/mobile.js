@@ -335,39 +335,49 @@ function closeDateModal() {
     document.getElementById('date-modal').style.display = 'none';
     initCalendar(); // 閉じた時にカレンダーを再描画
 }
-function downloadHistory() {
-    // 1. LocalStorage内のすべてのデータをかき集める
+async function downloadHistory() {
     const exportData = {};
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key) {
+        if (key)
             exportData[key] = localStorage.getItem(key);
-        }
     }
-    // データが空の場合は警告を出す
     if (Object.keys(exportData).length === 0) {
         alert("保存されているデータがありません。");
         return;
     }
-    // 2. データをJSON形式の文字列に変換
     const jsonString = JSON.stringify(exportData, null, 2);
-    // 3. Blob（ファイルの実体）を作成
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    // 4. ダウンロード用のURLを生成
-    const url = URL.createObjectURL(blob);
-    // 5. ファイル名に今日の日付をつける（例: shift_history_2026-07-17.json）
+    // 日付付きのファイル名を作成
     const date = new Date();
     const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
     const fileName = `shift_history_${dateString}.json`;
-    // 6. 見えないリンク（<a>タグ）を作って強制的にクリックさせる
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    // 7. 使用後のゴミ掃除
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // 文字列を「ファイル」に変換
+    const file = new File([jsonString], fileName, { type: 'application/json' });
+    // ▼ スマホの共有メニュー（シェアシート）を呼び出す魔法 ▼
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                files: [file],
+                title: 'シフト履歴のバックアップ',
+            });
+            // 共有完了（ファイルに保存など）した時の処理
+        }
+        catch (error) {
+            console.log('共有がキャンセルされました', error);
+        }
+    }
+    else {
+        // パソコンなど、シェアシートがない環境向けの古い処理（フォールバック）
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("ダウンロードが完了しました。「ファイル」アプリをご確認ください。");
+    }
 }
 // HTMLへの公開
 window.updateKoma = updateKoma;
