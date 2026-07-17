@@ -102,6 +102,12 @@ function initCalendar() {
             html += `<div class="koma-row"><span class="material-symbols-outlined icon-hs">school</span> ${shift.highSchool}</div>`;
         if (shift.tutor > 0)
             html += `<div class="koma-row"><span class="material-symbols-outlined icon-tutor">local_library</span> ${shift.tutor}</div>`;
+        if (shift.adjust !== 0) {
+            // プラスの時は「+」記号をつけ、マイナスの時は数値自体に「-」がついているのでそのまま
+            const sign = shift.adjust > 0 ? '+' : '';
+            // カレンダー用のクラスとアイコンを指定
+            html += `<div class="koma-row"><span class="material-symbols-outlined icon-adjust">more_time</span> ${sign}${shift.adjust}分</div>`;
+        }
         cell.innerHTML = html;
         calendarDiv.appendChild(cell);
         currentDate.setDate(currentDate.getDate() + 1);
@@ -389,7 +395,7 @@ async function downloadHistory() {
 }
 function resetDailyShift() {
     // 誤操作を防ぐための確認ダイアログ
-    const isConfirmed = confirm("この日のシフト情報をすべてクリアしますか？");
+    const isConfirmed = confirm("この日のシフト情報をクリアしますか？");
     if (isConfirmed) {
         // ※ currentSelectedDate は、現在選択中の日付を保持している変数を指定してください
         // （もし変数名が異なる場合は、ご自身のコードに合わせて変更してください）

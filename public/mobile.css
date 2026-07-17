@@ -646,3 +646,33 @@ body {
     color: #8e8e93;            /* 目立ちすぎないグレーのアイコン */
     pointer-events: none;      /* タップの邪魔にならないようにする */
 }
+
+/* カレンダー上の時間調整アイコンの色 */
+.icon-adjust {
+    color: #ff9500; /* iOS標準のオレンジ色 */
+}
+
+.scroll-bottom-blur {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    
+    /* 高さを120pxから大幅に縮小し、視認性を確保 */
+    height: 60px; 
+    
+    /* 背景色は不要なので消去（ぼかし効果だけで表現します） */
+    background: transparent;
+    
+    /* 少し強めのすりガラス効果 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    /* ▼ 境界線を完全に消し去る究極の魔法（マスク効果） ▼ */
+    /* 上部は完全に透明（ぼかしゼロ）で、下に行くほど不透明（ぼかし100%）になります */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+    
+    pointer-events: none;
+    z-index: 10; 
+}

@@ -181,6 +181,8 @@
         </div>
     </div>
 
+    <div class="scroll-bottom-blur"></div>
+
     <!-- ▼ ポップアップ用モーダル（新規追加） ▼ -->
     <div id="detail-modal" class="modal-overlay">
         <div class="modal-content">
@@ -194,29 +196,39 @@
                 </div>
             </div>
             <div class="detail-row">
-    <span class="detail-label">時間調整</span>
+                <span class="detail-label" style="display: flex; align-items: center;">
+                    <!-- margin-right: 8px; で文字との間に適度な余白を作ります -->
+                    <span class="material-symbols-outlined" style="margin-right: 8px; color: #8e8e93;">more_time</span>
+                    時間調整
+                </span>
     
-    <!-- ▼ 変更：ピッカーを呼び出すセレクトボックス ▼ -->
-    <div class="ios-picker-wrapper">
-        <select id="modal-adjust-select" class="ios-native-select" onchange="updateAdjustFromPicker()">
-            <option value="-60">-60分</option>
-            <option value="-40">-40分</option>
-            <option value="-30">-30分</option>
-            <option value="-20">-20分</option>
-            <option value="-10">-10分</option>
-            <option value="0" selected>0分</option>
-            <option value="10">+10分</option>
-            <option value="20">+20分</option>
-            <option value="30">+30分</option>
-            <option value="40">+40分</option>
-            <option value="60">+60分</option>
-            <option value="90">+90分</option>
-            <option value="120">+120分</option>
-        </select>
-        <!-- 「押すと開くよ」と伝えるための小さな上下矢印 -->
-        <span class="material-symbols-outlined picker-icon">unfold_more</span>
-    </div>
-</div>
+                <!-- ▼ 変更：ピッカーを呼び出すセレクトボックス ▼ -->
+                <div class="ios-picker-wrapper">
+                    <select id="modal-adjust-select" class="ios-native-select" onchange="updateAdjustFromPicker()">
+                        <option value="-30">-30分</option>
+                        <option value="-25">-25分</option>
+                        <option value="-20">-20分</option>
+                        <option value="-15">-15分</option>
+                        <option value="-10">-10分</option>
+                        <option value="-5">-5分</option>
+                        <option value="0" selected>0分</option>
+                        <option value="5">+5分</option>
+                        <option value="10">+10分</option>
+                        <option value="15">+15分</option>
+                        <option value="20">+20分</option>
+                        <option value="25">+25分</option>
+                        <option value="30">+30分</option>
+                        <option value="35">+35分</option>
+                        <option value="40">+40分</option>
+                        <option value="45">+45分</option>
+                        <option value="50">+50分</option>
+                        <option value="55">+55分</option>
+                        <option value="60">+60分</option>
+                    </select>
+                    <!-- 「押すと開くよ」と伝えるための小さな上下矢印 -->
+                    <span class="material-symbols-outlined picker-icon">unfold_more</span>
+                </div>
+            </div>
             <button class="ios-primary-btn" onclick="closeDetailModal()" style="margin-top: 24px;">完了</button>
         </div>
     </div>
