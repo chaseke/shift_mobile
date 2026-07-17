@@ -536,3 +536,26 @@ body {
     margin: 0;
     line-height: 1;
 }
+
+/* ▼ 一括クリア（削除）ボタン ▼ */
+.ios-reset-btn {
+    width: 100%;
+    background-color: #f2f2f7; /* 薄いグレー */
+    color: #ff3b30;            /* iOS標準の赤（Destructive） */
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 400;          /* ご要望通りの細めの文字 */
+    cursor: pointer;
+    margin-top: 12px;          /* 上のボタンとの余白 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s;
+}
+
+/* 押したときのアニメーション */
+.ios-reset-btn:active {
+    background-color: #e5e5ea; /* 少し濃いグレーになる */
+}

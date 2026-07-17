@@ -420,6 +420,33 @@ async function downloadHistory() {
     }
 }
 
+function resetDailyShift() {
+    // 誤操作を防ぐための確認ダイアログ
+    const isConfirmed = confirm("この日のシフト情報をすべてクリアしますか？");
+    
+    if (isConfirmed) {
+        // ※ currentSelectedDate は、現在選択中の日付を保持している変数を指定してください
+        // （もし変数名が異なる場合は、ご自身のコードに合わせて変更してください）
+        const dateStr = selectedDateStr; 
+        
+        // データを取得してすべて0にリセット
+        const data = getShift(dateStr);
+        data.jrHigh = 0;
+        data.highSchool = 0;
+        data.tutor = 0;
+        data.adjust = 0;
+        
+        // 保存と画面の更新（既存の関数を呼び出す）
+        saveShifts();
+        
+        // パネルの数値を0にリセット表示
+        updatePanelDisplay();
+        
+        // カレンダーと合計時間の再描画（既存の関数名に合わせてください）
+        initCalendar();  
+    }
+}
+
 const mainContent = document.querySelector('.main-content');
 const tabBar = document.querySelector('.tab-bar');
 
