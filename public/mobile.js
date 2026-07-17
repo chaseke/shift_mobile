@@ -457,3 +457,4 @@ window.saveWageSettings = saveWageSettings;
 window.calculateAndShowIncome = calculateAndShowIncome;
 window.openDateModal = openDateModal;
 window.closeDateModal = closeDateModal;
+window.resetDailyShift = resetDailyShift;

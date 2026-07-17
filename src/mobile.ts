@@ -509,3 +509,4 @@ window.addEventListener("popstate", (event) => {
 (window as any).calculateAndShowIncome = calculateAndShowIncome;
 (window as any).openDateModal = openDateModal;
 (window as any).closeDateModal = closeDateModal;
+(window as any).resetDailyShift = resetDailyShift;
