@@ -659,23 +659,24 @@ body {
     width: 100%;
     
     /* 高さを120pxから大幅に縮小し、視認性を確保 */
-    height: 60px; 
+    height: 70px; 
     
     /* 背景色は不要なので消去（ぼかし効果だけで表現します） */
     background: linear-gradient(
         to bottom, 
-        rgba(242, 242, 247, 0) 0%, 
+        rgba(242, 242, 247, 0) 0%,
+        rgba(242, 242, 247, 1) 80%  /* ここで完全に塗りつぶす*/
         rgba(242, 242, 247, 0.9) 100%  /* 下部は90%の濃さのグレー */
     );
     
     /* 少し強めのすりガラス効果 */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     
     /* ▼ 境界線を完全に消し去る究極の魔法（マスク効果） ▼ */
     /* 上部は完全に透明（ぼかしゼロ）で、下に行くほど不透明（ぼかし100%）になります */
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 80%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 80%, black 100%);
     
     pointer-events: none;
     z-index: 10; 
