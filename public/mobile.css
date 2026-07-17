@@ -60,6 +60,8 @@ body {
     z-index: 1000;
     padding: 0 8px; /* 内側の余白 */
     box-sizing: border-box;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    overflow: hidden;
 }
 
 .tab-btn {
@@ -75,7 +77,7 @@ body {
     height: 48px;
     border-radius: 24px; /* ボタン自体も丸くする */
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* 選択中のタブは背景を薄いブルーにして丸く囲む */
@@ -94,7 +96,7 @@ body {
     padding: 0 8px; /* ボタンに合わせた余白 */
     box-sizing: border-box;
     z-index: 0;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* なめらかなスライド */
+    transition: opacity 0.3s, transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); /* なめらかなスライド */
 }
 /* ガラスのテクスチャ本体 */
 .tab-indicator {
@@ -106,6 +108,43 @@ body {
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.5); /* 光沢感を出す白いフチ */
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.tab-bar.scrolled:not(.force-expand) {
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    left: 16px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.tab-bar.scrolled:not(.force-expand) .tab-indicator-wrapper {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tab-bar.scrolled:not(.force-expand) .tab-btn:not(.active) {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tab-bar.scrolled:not(.force-expand) .tab-btn.active {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: transparent; /* 透明に変更 */
+    color: #007aff;              /* アイコンを白にする */
+}
+.tab-bar.scrolled:not(.force-expand) .tab-btn.active .tab-label {
+    display: none; /* 下の文字（「カレンダー」など）を消す */
+}
+.tab-bar.scrolled:not(.force-expand) .tab-btn.active .material-symbols-outlined {
+    margin-bottom: 0; /* アイコンをど真ん中に持ってくる */
+    font-size: 28px;  /* アイコンを少し大きくする */
 }
 
 .tab-btn .material-symbols-outlined { font-size: 24px; margin-bottom: 2px; }
@@ -140,6 +179,7 @@ body {
     font-weight: 700;
     font-size: 16px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    margin-top: 16px;
     margin-bottom: 16px;
 }
 
@@ -274,6 +314,8 @@ body {
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+
+    margin-bottom: 24px;
 }
 .detail-title {
     font-size: 18px;

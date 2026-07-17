@@ -415,6 +415,32 @@ async function downloadHistory() {
         alert("ダウンロードが完了しました。「ファイル」アプリをご確認ください。");
     }
 }
+
+const mainContent = document.querySelector('.main-content');
+const tabBar = document.querySelector('.tab-bar');
+
+if (mainContent && tabBar) {
+    
+    // ▼ 追加: タブバー（丸いアイコン）をタップした時の処理
+    tabBar.addEventListener('click', () => {
+        // もし縮んでいる状態（scrolled）なら、強制展開（force-expand）の合図を出す
+        if (tabBar.classList.contains('scrolled')) {
+            tabBar.classList.add('force-expand');
+        }
+    });
+
+    // ▼ 既存: スクロールした時の処理
+    mainContent.addEventListener('scroll', () => {
+        // カレンダーなどをスクロールしたら、展開モードを解除して再び縮める
+        tabBar.classList.remove('force-expand');
+
+        if (mainContent.scrollTop > 20) {
+            tabBar.classList.add('scrolled');
+        } else {
+            tabBar.classList.remove('scrolled');
+        }
+    });
+}
 // HTMLへの公開
 (window as any).updateKoma = updateKoma;
 (window as any).switchPage = switchPage;
