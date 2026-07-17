@@ -283,7 +283,7 @@ function switchPage(target, tabIndex, isHistoryBack = false) {
     //     }
     // }
     if (!isHistoryBack) {
-        history.pushState({ pageId: target, tabIndex: tabIndex }, "");
+        history.pushState({ pageId: target, tabIndex: tabIndex }, "", "#" + target);
     }
 }
 // ▼ 追加: 1ヶ月の合計時間を計算する関数 ▼
@@ -410,6 +410,9 @@ if (mainContent && tabBar) {
         }
         lastScrollTop = currentScroll;
     });
+}
+if (!history.state) {
+    history.replaceState({ target: 'shift', tabIndex: 0 }, "", "#shift");
 }
 window.addEventListener("popstate", (event) => {
     if (event.state && event.state.string) {

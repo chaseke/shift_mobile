@@ -309,7 +309,7 @@ function switchPage(target: string, tabIndex: number | HTMLElement | null, isHis
     // }
 
     if (!isHistoryBack) {
-        history.pushState({ pageId: target, tabIndex: tabIndex }, "");
+        history.pushState({ pageId: target, tabIndex: tabIndex }, "", "#" + target);
     }
 }
 
@@ -454,6 +454,11 @@ if (mainContent && tabBar) {
         lastScrollTop = currentScroll;
     });
 }
+
+if (!history.state) {
+    history.replaceState({ target: 'shift', tabIndex: 0}, "", "#shift");
+}
+
 
 window.addEventListener("popstate", (event) => {
     if (event.state && event.state.string) {
