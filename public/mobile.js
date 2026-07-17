@@ -106,7 +106,7 @@ function initCalendar() {
             // プラスの時は「+」記号をつけ、マイナスの時は数値自体に「-」がついているのでそのまま
             const sign = shift.adjust > 0 ? '+' : '';
             // カレンダー用のクラスとアイコンを指定
-            html += `<div class="koma-row"><span class="material-symbols-outlined icon-adjust">more_time</span> ${sign}${shift.adjust}分</div>`;
+            html += `<div class="koma-row"><span class="material-symbols-outlined icon-adjust">more_time</span> ${sign}${shift.adjust}</div>`;
         }
         cell.innerHTML = html;
         calendarDiv.appendChild(cell);

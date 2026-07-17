@@ -649,7 +649,12 @@ body {
 
 /* カレンダー上の時間調整アイコンの色 */
 .icon-adjust {
-    color: #ff9500; /* iOS標準のオレンジ色 */
+    color: #8e8e93; /*  */
+}
+
+.adjust-row {
+    font-weight: 400;
+    color: #8e8e93;
 }
 
 .scroll-bottom-blur {
