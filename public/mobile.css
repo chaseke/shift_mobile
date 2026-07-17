@@ -42,7 +42,7 @@ body {
 /* ▼ 変更: 最新iOS風 フローティング・タブバー ▼ */
 .tab-bar {
     padding: 0;
-    position: relative;
+    position: fixed;
     /* 画面下部から少し浮かせ、横幅も少し狭める */
     bottom: max(20px, env(safe-area-inset-bottom));
     left: 16px;

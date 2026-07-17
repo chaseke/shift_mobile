@@ -260,11 +260,11 @@ function calculateAndShowIncome() {
         currentDate.setDate(currentDate.getDate() + 1);
     }
 
-    const incomeAdmin = Math.floor((totalAdminMins / 60) * wageSettings.admin);
-    const incomeJrHigh = Math.floor((totalJrHighMins / 60) * wageSettings.jrHigh);
-    const incomeHs = Math.floor((totalHsMins / 60) * wageSettings.highSchool);
-    const incomeTutor = Math.floor((totalTutorMins / 60) * wageSettings.tutor);
-    const incomeTransport = workDays * wageSettings.transport;
+    const incomeAdmin = Math.floor((totalAdminMins / 60) * wageSettings.admin || 0);
+    const incomeJrHigh = Math.floor((totalJrHighMins / 60) * wageSettings.jrHigh || 0);
+    const incomeHs = Math.floor((totalHsMins / 60) * wageSettings.highSchool || 0);
+    const incomeTutor = Math.floor((totalTutorMins / 60) * wageSettings.tutor || 0);
+    const incomeTransport = workDays * (wageSettings.transport || 0);
     const totalIncome = incomeAdmin + incomeJrHigh + incomeHs + incomeTutor + incomeTransport;
 
     const container = document.getElementById('income-details-container') as HTMLDivElement;
@@ -369,6 +369,52 @@ function closeDateModal() {
     initCalendar(); // 閉じた時にカレンダーを再描画
 }
 
+async function downloadHistory() {
+    const exportData: { [key: string]: string | null } = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) exportData[key] = localStorage.getItem(key);
+    }
+
+    if (Object.keys(exportData).length === 0) {
+        alert("保存されているデータがありません。");
+        return;
+    }
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    
+    // 日付付きのファイル名を作成
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    const fileName = `shift_history_${dateString}.json`;
+
+    // 文字列を「ファイル」に変換
+    const file = new File([jsonString], fileName, { type: 'application/json' });
+
+    // ▼ スマホの共有メニュー（シェアシート）を呼び出す魔法 ▼
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                files: [file],
+                title: 'シフト履歴のバックアップ',
+            });
+            // 共有完了（ファイルに保存など）した時の処理
+        } catch (error) {
+            console.log('共有がキャンセルされました', error);
+        }
+    } else {
+        // パソコンなど、シェアシートがない環境向けの古い処理（フォールバック）
+        const url = URL.createObjectURL(file);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        alert("ダウンロードが完了しました。「ファイル」アプリをご確認ください。");
+    }
+}
 // HTMLへの公開
 (window as any).updateKoma = updateKoma;
 (window as any).switchPage = switchPage;

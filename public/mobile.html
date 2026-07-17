@@ -88,16 +88,22 @@
             <h1 class="ios-large-title">設定</h1>
             <h2 class="ios-section-title">時給・交通費</h2>
             <div class="ios-list-group">
-                <div class="ios-list-item"><label>事務時間</label><div class="ios-input-wrap"><input type="number" id="wage-admin" oninput="saveWageSetteings()"> 円</div></div>
-                <div class="ios-list-item"><label>小中学生</label><div class="ios-input-wrap"><input type="number" id="wage-jrhigh" oninput="saveWageSetteings()"> 円</div></div>
-                <div class="ios-list-item"><label>高校生</label><div class="ios-input-wrap"><input type="number" id="wage-high" oninput="saveWageSetteings()"> 円</div></div>
-                <div class="ios-list-item"><label>チューター</label><div class="ios-input-wrap"><input type="number" id="wage-tutor" oninput="saveWageSetteings()"> 円</div></div>
-                <div class="ios-list-item"><label>1日の交通費</label><div class="ios-input-wrap"><input type="number" id="wage-transport" oninput="saveWageSetteings()"> 円</div></div>
+                <div class="ios-list-item"><label>事務時間</label><div class="ios-input-wrap"><input type="number" id="wage-admin" oninput="saveWageSettings()"> 円</div></div>
+                <div class="ios-list-item"><label>小中学生</label><div class="ios-input-wrap"><input type="number" id="wage-jrhigh" oninput="saveWageSettings()"> 円</div></div>
+                <div class="ios-list-item"><label>高校生</label><div class="ios-input-wrap"><input type="number" id="wage-high" oninput="saveWageSettings()"> 円</div></div>
+                <div class="ios-list-item"><label>チューター</label><div class="ios-input-wrap"><input type="number" id="wage-tutor" oninput="saveWageSettings()"> 円</div></div>
+                <div class="ios-list-item"><label>1日の交通費</label><div class="ios-input-wrap"><input type="number" id="wage-transport" oninput="saveWageSettings()"> 円</div></div>
             </div>
 
             <button class="ios-primary-btn" onclick="calculateAndShowIncome()" style="background-color: #34c759;">
                 <span class="material-symbols-outlined">receipt_long</span>当月の明細を見る
             </button>
+
+            <h2 class="ios-section-title" style="margin-top: 32px;">データ管理</h2>
+            <div class="ios-list-group">
+                <button class="ios-primary-btn" onclick="downloadHistory()" style="background-color: #007aff;">
+                    <span class="material-symbols-outlined">download</span>入力内容をダウンロード
+                </button>
         </div>
 
         <!-- ▼ ページ4: 給与明細画面（新規追加） ▼ -->

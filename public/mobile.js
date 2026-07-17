@@ -239,11 +239,11 @@ function calculateAndShowIncome() {
         }
         currentDate.setDate(currentDate.getDate() + 1);
     }
-    const incomeAdmin = Math.floor((totalAdminMins / 60) * wageSettings.admin);
-    const incomeJrHigh = Math.floor((totalJrHighMins / 60) * wageSettings.jrHigh);
-    const incomeHs = Math.floor((totalHsMins / 60) * wageSettings.highSchool);
-    const incomeTutor = Math.floor((totalTutorMins / 60) * wageSettings.tutor);
-    const incomeTransport = workDays * wageSettings.transport;
+    const incomeAdmin = Math.floor((totalAdminMins / 60) * wageSettings.admin || 0);
+    const incomeJrHigh = Math.floor((totalJrHighMins / 60) * wageSettings.jrHigh || 0);
+    const incomeHs = Math.floor((totalHsMins / 60) * wageSettings.highSchool || 0);
+    const incomeTutor = Math.floor((totalTutorMins / 60) * wageSettings.tutor || 0);
+    const incomeTransport = workDays * (wageSettings.transport || 0);
     const totalIncome = incomeAdmin + incomeJrHigh + incomeHs + incomeTutor + incomeTransport;
     const container = document.getElementById('income-details-container');
     container.innerHTML = `
@@ -334,6 +334,40 @@ function openDateModal() {
 function closeDateModal() {
     document.getElementById('date-modal').style.display = 'none';
     initCalendar(); // 閉じた時にカレンダーを再描画
+}
+function downloadHistory() {
+    // 1. LocalStorage内のすべてのデータをかき集める
+    const exportData = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) {
+            exportData[key] = localStorage.getItem(key);
+        }
+    }
+    // データが空の場合は警告を出す
+    if (Object.keys(exportData).length === 0) {
+        alert("保存されているデータがありません。");
+        return;
+    }
+    // 2. データをJSON形式の文字列に変換
+    const jsonString = JSON.stringify(exportData, null, 2);
+    // 3. Blob（ファイルの実体）を作成
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    // 4. ダウンロード用のURLを生成
+    const url = URL.createObjectURL(blob);
+    // 5. ファイル名に今日の日付をつける（例: shift_history_2026-07-17.json）
+    const date = new Date();
+    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    const fileName = `shift_history_${dateString}.json`;
+    // 6. 見えないリンク（<a>タグ）を作って強制的にクリックさせる
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    // 7. 使用後のゴミ掃除
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 // HTMLへの公開
 window.updateKoma = updateKoma;
