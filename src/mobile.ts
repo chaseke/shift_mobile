@@ -137,6 +137,12 @@ function updatePanelDisplay() {
     const shift = getShift(selectedDateStr);
     document.getElementById('detail-jrhigh-count')!.innerText = shift.jrHigh.toString();
     document.getElementById('detail-hs-count')!.innerText = shift.highSchool.toString();
+    const data = getShift(selectedDateStr);
+    const adjustSelect = document.getElementById('modal-adjust-select') as HTMLSelectElement;
+
+    if (adjustSelect) {
+        adjustSelect.value = data.adjust.toString();
+    }
 }
 
 function updateKoma(type: 'jrHigh' | 'highSchool', amount: number) {
@@ -150,7 +156,7 @@ function updateKoma(type: 'jrHigh' | 'highSchool', amount: number) {
 function openDetailModal() {
     const shift = getShift(selectedDateStr);
     document.getElementById('modal-tutor-count')!.innerText = shift.tutor.toString();
-    document.getElementById('modal-adjust-count')!.innerText = `${shift.adjust}分`;
+    // document.getElementById('modal-adjust-count')!.innerText = `${shift.adjust}分`;
     document.getElementById('detail-modal')!.style.display = 'flex';
 }
 function closeDetailModal() {
@@ -447,6 +453,25 @@ function resetDailyShift() {
     }
 }
 
+// ==========================================
+// ピッカー（ドラムロール）から時間調整を変更する処理
+// ==========================================
+function updateAdjustFromPicker() {
+    const select = document.getElementById('modal-adjust-select') as HTMLSelectElement;
+    if (!select) return;
+    
+    // 選ばれた値を数値として取得
+    const newValue = parseInt(select.value, 10);
+    
+    // データの更新と保存
+    const dateStr = selectedDateStr;
+    const data = getShift(dateStr);
+    data.adjust = newValue;
+    
+    saveShifts();
+    initCalendar(); 
+}
+
 const mainContent = document.querySelector('.main-content');
 const tabBar = document.querySelector('.tab-bar');
 
@@ -510,3 +535,4 @@ window.addEventListener("popstate", (event) => {
 (window as any).openDateModal = openDateModal;
 (window as any).closeDateModal = closeDateModal;
 (window as any).resetDailyShift = resetDailyShift;
+(window as any).updateAdjustFromPicker = updateAdjustFromPicker;

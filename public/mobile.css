@@ -612,3 +612,37 @@ body {
     background-color: #c6c6c8; /* 薄いグレーの線 */
     margin: 4px 0;
 }
+
+/* =========================================
+   iOSネイティブピッカー（ドラムロール）用UI
+========================================= */
+.ios-picker-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background-color: #f2f2f7; /* 他のボタンと同じ薄いグレー */
+    border-radius: 8px;
+    padding: 6px 12px;
+}
+
+.ios-native-select {
+    appearance: none;          /* デフォルトの矢印や枠線を消す */
+    -webkit-appearance: none;  /* iOS Safari用のリセット */
+    background: transparent;
+    border: none;
+    font-size: 17px;
+    font-weight: 500;
+    color: #007aff;            /* Apple標準の青色 */
+    padding-right: 20px;       /* 矢印アイコン用のスペース */
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+}
+
+.picker-icon {
+    position: absolute;
+    right: 8px;
+    font-size: 18px;
+    color: #8e8e93;            /* 目立ちすぎないグレーのアイコン */
+    pointer-events: none;      /* タップの邪魔にならないようにする */
+}

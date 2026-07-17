@@ -121,6 +121,11 @@ function updatePanelDisplay() {
     const shift = getShift(selectedDateStr);
     document.getElementById('detail-jrhigh-count').innerText = shift.jrHigh.toString();
     document.getElementById('detail-hs-count').innerText = shift.highSchool.toString();
+    const data = getShift(selectedDateStr);
+    const adjustSelect = document.getElementById('modal-adjust-select');
+    if (adjustSelect) {
+        adjustSelect.value = data.adjust.toString();
+    }
 }
 function updateKoma(type, amount) {
     const shift = getShift(selectedDateStr);
@@ -136,7 +141,7 @@ function updateKoma(type, amount) {
 function openDetailModal() {
     const shift = getShift(selectedDateStr);
     document.getElementById('modal-tutor-count').innerText = shift.tutor.toString();
-    document.getElementById('modal-adjust-count').innerText = `${shift.adjust}分`;
+    // document.getElementById('modal-adjust-count')!.innerText = `${shift.adjust}分`;
     document.getElementById('detail-modal').style.display = 'flex';
 }
 function closeDetailModal() {
@@ -403,6 +408,22 @@ function resetDailyShift() {
         initCalendar();
     }
 }
+// ==========================================
+// ピッカー（ドラムロール）から時間調整を変更する処理
+// ==========================================
+function updateAdjustFromPicker() {
+    const select = document.getElementById('modal-adjust-select');
+    if (!select)
+        return;
+    // 選ばれた値を数値として取得
+    const newValue = parseInt(select.value, 10);
+    // データの更新と保存
+    const dateStr = selectedDateStr;
+    const data = getShift(dateStr);
+    data.adjust = newValue;
+    saveShifts();
+    initCalendar();
+}
 const mainContent = document.querySelector('.main-content');
 const tabBar = document.querySelector('.tab-bar');
 let lastScrollTop = 0;
@@ -458,3 +479,4 @@ window.calculateAndShowIncome = calculateAndShowIncome;
 window.openDateModal = openDateModal;
 window.closeDateModal = closeDateModal;
 window.resetDailyShift = resetDailyShift;
+window.updateAdjustFromPicker = updateAdjustFromPicker;
