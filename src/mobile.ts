@@ -281,7 +281,7 @@ function calculateAndShowIncome() {
 }
 
 // ページ遷移関数
-function switchPage(target: string, tabIndex: number | HTMLElement | null) {
+function switchPage(target: string, tabIndex: number | HTMLElement | null, isHistoryBack: boolean = false) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     
@@ -307,6 +307,10 @@ function switchPage(target: string, tabIndex: number | HTMLElement | null) {
     //         indicator.style.transform = `translateX(${tabIndex * 100}%)`;
     //     }
     // }
+
+    if (!isHistoryBack) {
+        history.pushState({ pageId: target, tabIndex: tabIndex }, "");
+    }
 }
 
 // ▼ 追加: 1ヶ月の合計時間を計算する関数 ▼
@@ -450,6 +454,15 @@ if (mainContent && tabBar) {
         lastScrollTop = currentScroll;
     });
 }
+
+window.addEventListener("popstate", (event) => {
+    if (event.state && event.state.string) {
+        switchPage(event.state.string, event.state.tabIndex, true);
+    } else {
+        switchPage("shift", 0, true);
+    }
+});
+
 // HTMLへの公開
 (window as any).updateKoma = updateKoma;
 (window as any).switchPage = switchPage;
