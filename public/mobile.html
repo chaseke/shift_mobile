@@ -195,10 +195,22 @@
             </div>
             <div class="detail-row">
                 <span class="detail-label"><span class="material-symbols-outlined" style="color:#8e8e93;">schedule</span> 時間調整</span>
-                <div class="counter-group">
-                    <button class="ios-stepper-btn" onclick="updateModalAdjust(-5)"><span class="material-symbols-outlined">remove</span></button>
-                    <span id="modal-adjust-count" class="count-display" style="width: 50px;">0分</span>
-                    <button class="ios-stepper-btn" onclick="updateModalAdjust(5)"><span class="material-symbols-outlined">add</span></button>
+                <!-- ▼ 変更：数値を左に出し、＋－ボタンを右にまとめる ▼ -->
+                <div class="ios-stepper-container">
+                    <!-- 数値表示エリア（十分な幅を確保） -->
+                    <span id="modal-adjust-count" class="ios-stepper-value">0分</span>
+        
+                    <!-- Apple風カプセル型ボタン -->
+                    <div class="ios-stepper">
+                        <!-- ※ onclickの中身は、ご自身の既存の関数名に合わせてください -->
+                        <button onclick="changeAdjust(-10)">
+                            <span class="material-symbols-outlined">remove</span>
+                        </button>
+                        <div class="stepper-divider"></div>
+                        <button onclick="changeAdjust(10)">
+                            <span class="material-symbols-outlined">add</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <button class="ios-primary-btn" onclick="closeDetailModal()" style="margin-top: 24px;">完了</button>

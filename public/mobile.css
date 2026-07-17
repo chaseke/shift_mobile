@@ -559,3 +559,56 @@ body {
 .ios-reset-btn:active {
     background-color: #e5e5ea; /* 少し濃いグレーになる */
 }
+
+/* =========================================
+   iOS標準風 ステッパー (UIStepper)
+========================================= */
+.ios-stepper-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 数値表示部分（3文字以上になっても崩れないように固定幅を持たせる） */
+.ios-stepper-value {
+    font-size: 17px;
+    font-weight: 500;
+    margin-right: 16px;
+    min-width: 48px;  /* ここで幅を確保しているため、二段に分裂しません */
+    text-align: right;
+    font-variant-numeric: tabular-nums; /* 数字の幅を均等にしてガタつきを防ぐ魔法 */
+}
+
+/* カプセル型ボタンの外枠 */
+.ios-stepper {
+    display: flex;
+    background-color: #f2f2f7; /* iOSの標準的なコントロール背景色 */
+    border-radius: 8px;        /* ほどよい丸み */
+    overflow: hidden;
+    width: 94px;
+    height: 32px;
+}
+
+/* ＋と－のボタン本体 */
+.ios-stepper button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #007aff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+/* タップした時のフィードバック */
+.ios-stepper button:active {
+    background-color: #e5e5ea;
+}
+
+/* ＋と－の間の仕切り線 */
+.stepper-divider {
+    width: 1px;
+    background-color: #c6c6c8; /* 薄いグレーの線 */
+    margin: 4px 0;
+}
